@@ -366,15 +366,21 @@ const MessageActions = React.memo(
 				}
 			};
 
-			const handleReport = async (message: TAnyMessageModel) => {
-				logEvent(events.ROOM_MSG_ACTION_REPORT);
-				try {
-					await reportMessage(message.id);
-					Alert.alert(I18n.t('Message_Reported'));
-				} catch (e) {
-					logEvent(events.ROOM_MSG_ACTION_REPORT_F);
-					log(e);
-				}
+			const handleReport = (message: TAnyMessageModel) => {
+				showConfirmationAlert({
+					message: I18n.t('Would_you_like_to_report_this_message'),
+					confirmationText: I18n.t('Report'),
+					onPress: async () => {
+						logEvent(events.ROOM_MSG_ACTION_REPORT);
+						try {
+							await reportMessage(message.id);
+							Alert.alert(I18n.t('Message_Reported'));
+						} catch (e) {
+							logEvent(events.ROOM_MSG_ACTION_REPORT_F);
+							log(e);
+						}
+					}
+				});
 			};
 
 			const handleDelete = (message: TAnyMessageModel) => {
